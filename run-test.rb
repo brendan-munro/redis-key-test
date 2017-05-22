@@ -82,7 +82,10 @@ puts "Test ID: #{test_id}"
 puts "Running test of #{options[:keys]} keys with a #{options[:delay]} ms delay"
 
 options[:keys].times do |i|
-    redis.set("#{test_id}-#{i}", test_id)
+    begin
+        redis.set("#{test_id}-#{i}", test_id)
+    rescue
+    end
     sleep(options[:delay]/1000.0)
 end
 
