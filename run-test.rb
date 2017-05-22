@@ -61,14 +61,10 @@ class ParseOpts
 end
 
 options = ParseOpts.parse(ARGV)
-pp options
-pp ARGV
 
 redis_options = { host: options[:host], port: options[:port] }
 
 redis = Redis.new(redis_options)
-
-puts redis.ping
 
 test_id = SecureRandom.uuid
 
