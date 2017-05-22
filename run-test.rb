@@ -72,7 +72,7 @@ end
 
 options = ParseOpts.parse(ARGV)
 
-redis_options = { host: options[:host], port: options[:port], tcp_keepalive: options[tcp_keepalive, reconnect_attempts: options[:reconnect_attempts] }
+redis_options = { host: options[:host], port: options[:port], tcp_keepalive: options[:tcp_keepalive], reconnect_attempts: options[:reconnect_attempts] }
 
 redis = Redis.new(redis_options)
 
