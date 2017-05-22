@@ -7,7 +7,7 @@ require 'redis'
 require 'optparse'
 require 'ostruct'
 require 'pp'
-require 'SecureRandom'
+require 'securerandom'
 
 class ParseOpts
 
