@@ -21,11 +21,12 @@ class ParseOpts
     # The options specified on the command line will be collected in *options*.
     # We set default values here.
     options = OpenStruct.new
-    options.library = []
-    options.inplace = false
-    options.encoding = "utf8"
-    options.transfer_type = :auto
-    options.verbose = false
+    options.host = "localhost"
+    options.port = "6379"
+    options.keys = 500
+    options.delay = 5
+    options.tcp_keepalive = 10
+    options.reconnect_attempts = 10
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: run-test.rb [options]"
@@ -52,8 +53,17 @@ class ParseOpts
               "Redis port") do |p|
         options.port = p
       end
-    end
 
+      opts.on("-r", "--recconect-attempts x", Integer,
+              "reconnect-attempts") do |r|
+        options.recconect_attempts = r
+      end
+
+      opts.on("-k", "--keepalive x", Integer,
+              "Redis tcp keepalive setting") do |k|
+        options.tcp_keepalive = k
+      end
+    end
     opt_parser.parse!(args)
     options
   end  # parse()
@@ -62,7 +72,7 @@ end
 
 options = ParseOpts.parse(ARGV)
 
-redis_options = { host: options[:host], port: options[:port] }
+redis_options = { host: options[:host], port: options[:port], tcp_keepalive: options[tcp_keepalive, reconnect_attempts: options[:reconnect_attempts] }
 
 redis = Redis.new(redis_options)
 

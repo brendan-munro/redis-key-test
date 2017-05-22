@@ -21,11 +21,9 @@ class ParseOpts
     # The options specified on the command line will be collected in *options*.
     # We set default values here.
     options = OpenStruct.new
-    options.library = []
-    options.inplace = false
-    options.encoding = "utf8"
-    options.transfer_type = :auto
-    options.verbose = false
+    options.host = "localhost"
+    options.port = "6379"
+    options.keys = 500
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: run-test.rb [options]"
