@@ -56,7 +56,7 @@ class ParseOpts
 
       opts.on("-r", "--recconect-attempts x", Integer,
               "reconnect-attempts") do |r|
-        options.recconect_attempts = r
+        options.reconnect_attempts = r
       end
 
       opts.on("-k", "--keepalive x", Integer,
