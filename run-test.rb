@@ -63,6 +63,11 @@ class ParseOpts
               "Redis tcp keepalive setting") do |k|
         options.tcp_keepalive = k
       end
+
+      opts.on("-v", "--verbose",
+              "Verbose") do |v|
+        options.verbose = v
+      end
     end
     opt_parser.parse!(args)
     options
@@ -74,19 +79,29 @@ options = ParseOpts.parse(ARGV)
 
 redis_options = { host: options[:host], port: options[:port], tcp_keepalive: options[:tcp_keepalive], reconnect_attempts: options[:reconnect_attempts] }
 
+pp redis_options
+
 redis = Redis.new(redis_options)
 
 test_id = SecureRandom.uuid
 
 puts "Test ID: #{test_id}"
 puts "Running test of #{options[:keys]} keys with a #{options[:delay]} ms delay"
+errors = 0
+last_error = false
+error_types = []
 
 options[:keys].times do |i|
     begin
+        last_error = false
         redis.set("#{test_id}-#{i}", test_id)
-    rescue
+    rescue Exception => ex
+      errors = errors + 1
+      last_error = true
+      error_types << ex.class unless error_types.include? ex.class
+      puts ex.message if options[:verbose]
     end
     sleep(options[:delay]/1000.0)
 end
 
-puts "Insert complete"
+puts "Insert complete, #{errors} errors encountered, last error #{last_error}, error types: #{error_types}"
